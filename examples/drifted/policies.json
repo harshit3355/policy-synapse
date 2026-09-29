@@ -1,0 +1,12 @@
+{
+  "policies": [
+    {"intent": "prod-signed-images", "surface": "ci", "file": "ci_signed_images.rego", "decision": "deny"},
+    {"intent": "prod-approved-registry", "surface": "runtime", "file": "runtime_prod_registry.rego", "decision": "allow"},
+    {"intent": "prod-eu-residency", "surface": "terraform", "file": "tf_eu_residency.rego", "decision": "deny"},
+    {"intent": "prod-eu-residency", "surface": "runtime", "file": "runtime_eu_residency.rego", "decision": "allow"},
+    {"intent": "prod-min-replicas", "surface": "admission", "file": "gatekeeper_min_replicas.rego", "decision": "violation"},
+    {"intent": "prod-min-replicas", "surface": "ci", "file": "ci_min_replicas.rego", "decision": "deny"},
+    {"intent": "confidential-not-public", "surface": "terraform", "file": "tf_confidential_not_public.rego", "decision": "deny"},
+    {"intent": "prod-not-public", "surface": "runtime", "file": "runtime_prod_not_public.rego", "decision": "allow"}
+  ]
+}

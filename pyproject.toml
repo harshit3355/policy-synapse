@@ -1,0 +1,14 @@
+[project]
+name = "policy-synapse"
+version = "0.1.0"
+description = "Cross-surface policy consistency: one governance intent, differentially tested across CI, Gatekeeper, Terraform plan and runtime Rego."
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
