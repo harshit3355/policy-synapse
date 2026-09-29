@@ -1,0 +1,245 @@
+{
+  "gcs": 0.917,
+  "consistent": false,
+  "intents": [
+    {
+      "intent": "prod-signed-images",
+      "title": "Production workloads run signed images",
+      "criticality": 3,
+      "suite_size": 13,
+      "baseline": {
+        "env": "prod",
+        "signed": true
+      },
+      "reference_fingerprint": "44e2c908699e217f",
+      "agreement": 0.9231,
+      "surfaces": [
+        {
+          "surface": "ci",
+          "file": "ci_signed_images.rego",
+          "fingerprint": "37b8aa77e0626666",
+          "consistent": false,
+          "divergent_states": 1,
+          "counterexamples": [
+            {
+              "changed_from_baseline": {},
+              "state": {
+                "env": "prod",
+                "signed": true
+              },
+              "intent_says": "allow",
+              "policy_says": "deny"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "intent": "prod-approved-registry",
+      "title": "Production images come from the production registry",
+      "criticality": 3,
+      "suite_size": 14,
+      "baseline": {
+        "env": "prod",
+        "image_registry": "acrprod.azurecr.io"
+      },
+      "reference_fingerprint": "19a499580a75cc27",
+      "agreement": 0.8571,
+      "surfaces": [
+        {
+          "surface": "runtime",
+          "file": "runtime_prod_registry.rego",
+          "fingerprint": "9584f54e161ad08d",
+          "consistent": false,
+          "divergent_states": 2,
+          "counterexamples": [
+            {
+              "changed_from_baseline": {
+                "image_registry": "acrprod.azurecr.io.evil.io"
+              },
+              "state": {
+                "env": "prod",
+                "image_registry": "acrprod.azurecr.io.evil.io"
+              },
+              "intent_says": "deny",
+              "policy_says": "allow"
+            },
+            {
+              "changed_from_baseline": {
+                "env": null,
+                "image_registry": "ghcr.io"
+              },
+              "state": {
+                "env": null,
+                "image_registry": "ghcr.io"
+              },
+              "intent_says": "allow",
+              "policy_says": "deny"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "intent": "prod-eu-residency",
+      "title": "Production stays in EU regions",
+      "criticality": 3,
+      "suite_size": 16,
+      "baseline": {
+        "env": "prod",
+        "region": "westeurope"
+      },
+      "reference_fingerprint": "75593a51b8107540",
+      "agreement": 0.9375,
+      "surfaces": [
+        {
+          "surface": "terraform",
+          "file": "tf_eu_residency.rego",
+          "fingerprint": "4f09d0faa36bae8d",
+          "consistent": false,
+          "divergent_states": 1,
+          "counterexamples": [
+            {
+              "changed_from_baseline": {
+                "region": null
+              },
+              "state": {
+                "env": "prod",
+                "region": null
+              },
+              "intent_says": "deny",
+              "policy_says": "allow"
+            }
+          ]
+        },
+        {
+          "surface": "runtime",
+          "file": "runtime_eu_residency.rego",
+          "fingerprint": "75593a51b8107540",
+          "consistent": true,
+          "divergent_states": 0,
+          "counterexamples": []
+        }
+      ]
+    },
+    {
+      "intent": "confidential-not-public",
+      "title": "Confidential and restricted data is never publicly reachable",
+      "criticality": 3,
+      "suite_size": 13,
+      "baseline": {
+        "data_class": "confidential",
+        "public_ingress": false
+      },
+      "reference_fingerprint": "4579a2cedd2b641f",
+      "agreement": 0.9231,
+      "surfaces": [
+        {
+          "surface": "terraform",
+          "file": "tf_confidential_not_public.rego",
+          "fingerprint": "043511e66a123330",
+          "consistent": false,
+          "divergent_states": 1,
+          "counterexamples": [
+            {
+              "changed_from_baseline": {
+                "public_ingress": null
+              },
+              "state": {
+                "data_class": "confidential",
+                "public_ingress": null
+              },
+              "intent_says": "deny",
+              "policy_says": "allow"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "intent": "prod-not-public",
+      "title": "Production is not publicly reachable",
+      "criticality": 2,
+      "suite_size": 13,
+      "baseline": {
+        "env": "prod",
+        "public_ingress": false
+      },
+      "reference_fingerprint": "10b82918b065ff05",
+      "agreement": 1.0,
+      "surfaces": [
+        {
+          "surface": "runtime",
+          "file": "runtime_prod_not_public.rego",
+          "fingerprint": "10b82918b065ff05",
+          "consistent": true,
+          "divergent_states": 0,
+          "counterexamples": []
+        }
+      ]
+    },
+    {
+      "intent": "prod-min-replicas",
+      "title": "Production runs at least two replicas",
+      "criticality": 2,
+      "suite_size": 16,
+      "baseline": {
+        "env": "prod",
+        "replicas": 2
+      },
+      "reference_fingerprint": "eae0381a481d9d23",
+      "agreement": 0.875,
+      "surfaces": [
+        {
+          "surface": "admission",
+          "file": "gatekeeper_min_replicas.rego",
+          "fingerprint": "23d70db6c5617bec",
+          "consistent": false,
+          "divergent_states": 2,
+          "counterexamples": [
+            {
+              "changed_from_baseline": {
+                "replicas": 0
+              },
+              "state": {
+                "env": "prod",
+                "replicas": 0
+              },
+              "intent_says": "deny",
+              "policy_says": "allow"
+            },
+            {
+              "changed_from_baseline": {
+                "replicas": 1
+              },
+              "state": {
+                "env": "prod",
+                "replicas": 1
+              },
+              "intent_says": "deny",
+              "policy_says": "allow"
+            }
+          ]
+        },
+        {
+          "surface": "ci",
+          "file": "ci_min_replicas.rego",
+          "fingerprint": "eae0381a481d9d23",
+          "consistent": true,
+          "divergent_states": 0,
+          "counterexamples": []
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "commit": "a9903eb4d2958d8a1157696df31b65e24fe1f5ad",
+    "command": "python -m policy_synapse check examples/drifted/policies.json --report reports/drift-case-study",
+    "python": "3.10.6",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "opa": "1.21.0",
+    "intents_sha256": "573df24b71055a1a",
+    "generated_at": "2026-09-29T08:54:14+00:00",
+    "manifest": "examples/drifted/policies.json"
+  }
+}
