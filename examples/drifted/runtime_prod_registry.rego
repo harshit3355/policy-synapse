@@ -8,4 +8,4 @@ default allow := false
 
 allow if input.workload.env != "prod"
 
-allow if startswith(input.workload.image.registry, "acrprod.azurecr.io")
+allow if startswith(input.workload.image.registry, "prodregistry.example.com")

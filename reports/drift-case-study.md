@@ -5,7 +5,7 @@ Governance Consistency Score: **0.917**. Divergence found.
 | Intent | Surface | File | Fingerprint (intent) | Status | Smallest counterexample |
 |---|---|---|---|---|---|
 | prod-signed-images | ci | `ci_signed_images.rego` | `37b8aa77e0626666` (`44e2c908699e217f`) | **diverges** on 1/13 | (baseline): intent allow, policy deny |
-| prod-approved-registry | runtime | `runtime_prod_registry.rego` | `9584f54e161ad08d` (`19a499580a75cc27`) | **diverges** on 2/14 | image_registry="acrprod.azurecr.io.evil.io": intent deny, policy allow |
+| prod-approved-registry | runtime | `runtime_prod_registry.rego` | `9584f54e161ad08d` (`19a499580a75cc27`) | **diverges** on 2/14 | image_registry="prodregistry.example.com.evil.io": intent deny, policy allow |
 | prod-eu-residency | terraform | `tf_eu_residency.rego` | `4f09d0faa36bae8d` (`75593a51b8107540`) | **diverges** on 1/16 | region=<absent>: intent deny, policy allow |
 | prod-eu-residency | runtime | `runtime_eu_residency.rego` | `75593a51b8107540` (`75593a51b8107540`) | consistent |  |
 | confidential-not-public | terraform | `tf_confidential_not_public.rego` | `043511e66a123330` (`4579a2cedd2b641f`) | **diverges** on 1/13 | public_ingress=<absent>: intent deny, policy allow |

@@ -30,7 +30,7 @@ flowchart LR
 
 ## Worked example
 
-Intent `prod-approved-registry`: production images come from `acrprod.azurecr.io`. A hand-written
+Intent `prod-approved-registry`: production images come from `prodregistry.example.com`. A hand-written
 runtime policy ([`examples/drifted/runtime_prod_registry.rego`](examples/drifted/runtime_prod_registry.rego))
 implements it with a prefix match:
 
@@ -39,7 +39,7 @@ default allow := false
 
 allow if input.workload.env != "prod"
 
-allow if startswith(input.workload.image.registry, "acrprod.azurecr.io")
+allow if startswith(input.workload.image.registry, "prodregistry.example.com")
 ```
 
 Checking the case-study manifest (other policies' lines trimmed):
@@ -47,7 +47,7 @@ Checking the case-study manifest (other policies' lines trimmed):
 ```text
 $ python -m policy_synapse check examples/drifted/policies.json
 ...
-DIVERGES  prod-approved-registry [runtime] runtime_prod_registry.rego: 2/14 states, e.g. {'image_registry': 'acrprod.azurecr.io.evil.io'}
+DIVERGES  prod-approved-registry [runtime] runtime_prod_registry.rego: 2/14 states, e.g. {'image_registry': 'prodregistry.example.com.evil.io'}
 ...
 GCS 0.917  (divergence found)
 ```
@@ -55,7 +55,7 @@ GCS 0.917  (divergence found)
 The command exits 1. Of the 14 suite states, the policy disagrees with the intent on two
 ([`reports/drift-case-study.json`](reports/drift-case-study.json)):
 
-- `env="prod", image_registry="acrprod.azurecr.io.evil.io"`: intent deny, policy **allow**
+- `env="prod", image_registry="prodregistry.example.com.evil.io"`: intent deny, policy **allow**
   (a look-alike registry passes the prefix check);
 - `env=<absent>, image_registry="ghcr.io"`: intent allow, policy **deny** (in OPA,
   `input.workload.env != "prod"` is undefined when the field is absent, so the out-of-scope rule
@@ -91,7 +91,7 @@ design, and both correct policies passed. GCS **0.917**.
 | Policy | Result |
 |---|---|
 | CI: signature annotation compared with boolean `true` (it is the string `"true"`) | caught: signed prod images are denied |
-| Runtime: `startswith` on the registry | caught: `acrprod.azurecr.io.evil.io` is allowed |
+| Runtime: `startswith` on the registry | caught: `prodregistry.example.com.evil.io` is allowed |
 | Gatekeeper: reads label `environment` instead of `env` | caught: never enforced |
 | Terraform: `!= false` on public access | caught: a plan that omits the field passes |
 | Terraform: `not location in allowed_regions` | caught: in OPA, `not <absent field> in <set>` does not fire, so a plan without a location passes. The author of this example expected otherwise. |

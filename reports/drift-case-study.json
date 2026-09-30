@@ -41,7 +41,7 @@
       "suite_size": 14,
       "baseline": {
         "env": "prod",
-        "image_registry": "acrprod.azurecr.io"
+        "image_registry": "prodregistry.example.com"
       },
       "reference_fingerprint": "19a499580a75cc27",
       "agreement": 0.8571,
@@ -55,11 +55,11 @@
           "counterexamples": [
             {
               "changed_from_baseline": {
-                "image_registry": "acrprod.azurecr.io.evil.io"
+                "image_registry": "prodregistry.example.com.evil.io"
               },
               "state": {
                 "env": "prod",
-                "image_registry": "acrprod.azurecr.io.evil.io"
+                "image_registry": "prodregistry.example.com.evil.io"
               },
               "intent_says": "deny",
               "policy_says": "allow"
