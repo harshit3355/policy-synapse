@@ -28498,13 +28498,13 @@
     }
   ],
   "provenance": {
-    "commit": "a9903eb4d2958d8a1157696df31b65e24fe1f5ad",
+    "commit": "76449a41580e2a8a200bf27550159415a06d4e00",
     "command": "python -m policy_synapse bench --out reports",
     "python": "3.10.6",
     "platform": "Windows-10-10.0.26200-SP0",
     "opa": "1.21.0",
-    "intents_sha256": "573df24b71055a1a",
-    "generated_at": "2026-09-29T08:54:13+00:00",
+    "intents_sha256": "607efef8df5b3a7e",
+    "generated_at": "2026-09-30T17:34:06+00:00",
     "seed": 7
   }
 }
